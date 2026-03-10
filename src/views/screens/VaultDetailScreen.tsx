@@ -18,14 +18,16 @@ export default function VaultDetailScreen({ route, navigation }: any) {
     setPlain(null);
     if (!salt) return setErr("Missing kdfSalt");
 
-    const master = await getMasterPasswordAfterBiometric();
-    if (!master) return setErr("Biometric failed");
+    // const master = await getMasterPasswordAfterBiometric();
+    // if (!master) return setErr("Biometric failed");
+    const master = "123456"; // bỏ biometric, dùng master tạm
 
     try {
       const key = deriveKey(master, salt);
-      const p = decryptPassword(item.passwordCipher, item.iv, item.tag, key);
+      const p = decryptPassword(item.passwordCipher, item.iv, key);
       setPlain(p);
-    } catch {
+    } catch (e:any){
+      console.error(e);
       setErr("Decrypt failed (wrong master password or data corrupted)");
     }
   };
@@ -33,6 +35,20 @@ export default function VaultDetailScreen({ route, navigation }: any) {
   const onDelete = async () => {
     await deleteVaultController(item._id);
     navigation.replace("VaultList");
+  };
+  const getTypeLabel = (type: string) => {
+  switch (type) {
+    case "social":
+      return "Mạng xã hội";
+    case "system":
+      return "Hệ thống";
+    case "application":
+      return "Ứng dụng";
+    case "database":
+      return "Cơ sở dữ liệu";
+    default:
+      return type;
+  }
   };
 
   return (
@@ -44,12 +60,12 @@ export default function VaultDetailScreen({ route, navigation }: any) {
       </Appbar.Header>
 
       <View style={{ padding: 16, gap: 10 }}>
-        <Text>Type: {item.type}</Text>
-        {!!item.username && <Text>Username: {item.username}</Text>}
+        <Text>Loại: {getTypeLabel(item.type)}</Text>
+        {!!item.username && <Text>Tên đăng nhập: {item.username}</Text>}
         {!!item.url && <Text>URL: {item.url}</Text>}
-        {!!item.notes && <Text>Notes: {item.notes}</Text>}
+        {!!item.notes && <Text>Ghi chú: {item.notes}</Text>}
 
-        <Button mode="contained" onPress={onReveal}>Xác thực để xem mật khẩu</Button>
+        <Button mode="contained" onPress={onReveal}>Xem mật khẩu</Button>
         {!!plain && <Text selectable>Mật khẩu: {plain}</Text>}
         {!!err && <Text style={{ color: "red" }}>{err}</Text>}
 

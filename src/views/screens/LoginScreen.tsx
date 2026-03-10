@@ -18,8 +18,8 @@ export default function LoginScreen({ navigation, setIsAuthed }: any) {
       // ✅ quan trọng: bật auth để AppNavigator render nhánh VaultList
       setIsAuthed(true);
     } catch (e: any) {
-      setErr(e?.response?.data?.message || "Login failed");
-      console.error("Login error", e);
+      setErr(e?.response?.data?.message || "Đăng nhập thất bại!");
+      console.error("Lỗi đăng nhập!", e);
     } finally {
       setLoading(false);
     }
@@ -27,12 +27,12 @@ export default function LoginScreen({ navigation, setIsAuthed }: any) {
 
   return (
     <View style={{ padding: 16, gap: 12 }}>
-      <Text variant="headlineMedium">Đăng nhập</Text>
-      <TextInput label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" />
-      <TextInput label="Master Password" value={pw} onChangeText={setPw} secureTextEntry />
+      <Text variant="headlineMedium"></Text>
+      <TextInput label="Tên đăng nhập" value={email} onChangeText={setEmail} autoCapitalize="none" />
+      <TextInput label="Mật khẩu" value={pw} onChangeText={setPw} secureTextEntry />
       {!!err && <Text style={{ color: "red" }}>{err}</Text>}
-      <Button mode="contained" loading={loading} onPress={onLogin}>Login</Button>
-      <Button onPress={() => navigation.navigate("Register")}>Register</Button>
+      <Button mode="contained" loading={loading} onPress={onLogin}>Đăng nhập</Button>
+      <Button onPress={() => navigation.navigate("Register")}>Đăng ký</Button>
     </View>
   );
 }

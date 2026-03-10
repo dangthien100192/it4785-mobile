@@ -8,13 +8,14 @@ export async function registerController(email: string, masterPassword: string) 
 
 export async function loginController(email: string, masterPassword: string) {
   const data = await loginApi(email.trim(), masterPassword);
-  console.log("Login successful, setting auth state", data);
+  console.log("Đăng nhập thành công!", data);
   useAuthStore.getState().setAuth(data);
   await saveMasterPasswordBiometric(data.email, masterPassword);
   return data;
 }
 
-export async function logoutController() {
+export async function logoutController(setIsAuthed: (v: boolean) => void) {
   useAuthStore.getState().clear();
   await clearSecureMaterial();
+  setIsAuthed(false);
 }

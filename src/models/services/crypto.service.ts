@@ -21,9 +21,11 @@ export function deriveKey(masterPassword: string, kdfSaltB64: string) {
 export function encryptPassword(plain: string, key: CryptoJS.lib.WordArray) {
   const iv = CryptoJS.lib.WordArray.random(16);
   const enc = CryptoJS.AES.encrypt(plain, key, { iv });
+
   return {
-    ivB64: toB64(iv),
-    ctB64: enc.ciphertext.toString(CryptoJS.enc.Base64),
+    iv: iv.toString(CryptoJS.enc.Base64),
+    passwordCipher: enc.ciphertext.toString(CryptoJS.enc.Base64),
+    tag: "av",
   };
 }
 
