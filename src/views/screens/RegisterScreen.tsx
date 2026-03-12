@@ -16,9 +16,10 @@ export default function RegisterScreen({ navigation }: any) {
     setLoading(true);
     try {
       await registerController(email, pw);
-      setMsg("Register OK. Bạn hãy login.");
+      setMsg("Đăng ký thành công!");
     } catch (e: any) {
-      setErr(e?.response?.data?.message || "Register failed");
+      console.error("Lỗi đăng ký!", e);
+      setErr(e?.response?.data?.message || "Đăng ký thất bại!");
     } finally {
       setLoading(false);
     }
@@ -27,12 +28,12 @@ export default function RegisterScreen({ navigation }: any) {
   return (
     <View style={{ padding: 16, gap: 12 }}>
       <Text variant="headlineMedium">Đăng ký</Text>
-      <TextInput label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" />
-      <TextInput label="Master Password" value={pw} onChangeText={setPw} secureTextEntry />
+      <TextInput label="Tên đăng nhập" value={email} onChangeText={setEmail} autoCapitalize="none" />
+      <TextInput label="Mật khâu" value={pw} onChangeText={setPw} secureTextEntry />
       {!!msg && <Text style={{ color: "green" }}>{msg}</Text>}
       {!!err && <Text style={{ color: "red" }}>{err}</Text>}
-      <Button mode="contained" loading={loading} onPress={onRegister}>Register</Button>
-      <Button onPress={() => navigation.goBack()}>Back</Button>
+      <Button mode="contained" loading={loading} onPress={onRegister}>Đăng ký</Button>
+      <Button onPress={() => navigation.goBack()}>Quay lại</Button>
     </View>
   );
 }
