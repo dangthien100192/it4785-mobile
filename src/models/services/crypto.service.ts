@@ -8,13 +8,18 @@ function toB64(wordArray: CryptoJS.lib.WordArray) {
   return CryptoJS.enc.Base64.stringify(wordArray);
 }
 
+let cachedKey: CryptoJS.lib.WordArray | null = null;
+
 export function deriveKey(masterPassword: string, kdfSaltB64: string) {
+  if (cachedKey) return cachedKey;
+
   const salt = fromB64(kdfSaltB64);
   const key = CryptoJS.PBKDF2(masterPassword, salt, {
     keySize: 32 / 4, // 32 bytes
     iterations: 150000,
     hasher: CryptoJS.algo.SHA256,
   });
+  cachedKey = key;
   return key;
 }
 

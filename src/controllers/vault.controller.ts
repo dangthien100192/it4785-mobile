@@ -19,7 +19,7 @@ export async function createVaultController(p: {
   const salt = useAuthStore.getState().kdfSalt;
   if (!salt) throw new Error("Missing KDF salt");
 
-  const key = deriveKey(p.masterPassword, salt);
+  const key = useAuthStore.getState().derivedKey;
   const enc = encryptPassword(p.plainPassword, key);
 
   return await createVaultApi({

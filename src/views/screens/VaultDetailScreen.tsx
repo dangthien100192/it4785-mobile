@@ -66,7 +66,7 @@ export default function VaultDetailScreen({ route, navigation }: any) {
     const master = "123456"; // master tạm
 
     try {
-      const key = deriveKey(master, salt);
+      const key = useAuthStore.getState().derivedKey;
       const p = decryptPassword(item.passwordCipher, item.iv, key);
       setPlain(p);
       setVisible(true);
